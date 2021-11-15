@@ -1,8 +1,9 @@
-import {Clean} from './class-decorator-replace';
+import { Clean } from './class-decorator-replace';
 
-@Clean 
+@Clean
 export class Greeting {
-    constructor() {}
+
+    constructor() { }
 
     ngOnDestroy() {
 
@@ -13,4 +14,5 @@ it('It should call console log', () => {
     const spy = jest.spyOn(console, 'log');
     new Greeting().ngOnDestroy();
     expect(spy).toBeCalledWith('Cleaning....');
-})
+});
+
