@@ -1,36 +1,53 @@
-
-
-const sortFunctionFactory = (isAscending: boolean | undefined, sortByProperty: string | symbol | number | undefined) => {
-    const inversor = isAscending ? 1 : -1;
+const sortFunctionFactory = (isAscending: boolean | undefined, type?: 'string' | 'number' | 'date' | undefined, sortByProperty?: string | symbol | number) => {
+    const order = isAscending ? 1 : -1;
     if (sortByProperty) {
         return (a: any, b: any) => {
             if (a[sortByProperty] < b[sortByProperty]) {
-                return -1 * inversor;
+                return -1 * order;
             }
-
             if (a[sortByProperty] > b[sortByProperty]) {
-                return 1 * inversor;
+                return 1 * order;
             }
-
             return 0;
         }
     }
-    return (a: any, b: any) => {
+    return type === 'string' ? sortFunctionStringFactory(order, sortByProperty) : (a: any, b: any) => {
         if (a < b) {
-            return -1 * inversor;
+            return -1 * order;
         }
-
         if (a > b) {
-            return 1 * inversor;
+            return 1 * order;
         }
-
         return 0;
     }
 };
 
-export function SortBy<T>(sortByProperty?: string | symbol | number, options?: { isAscending?: boolean, type: 'string' | 'number' | 'date' }) {
+// I use the browser localeCompare() method to cover a much wider range of characters, which allows a more meaningful and sort orders
+const sortFunctionStringFactory = (order: number, sortByProperty?: string | symbol | number) => {
+    if (sortByProperty) {
+        return (a: any, b: any) => {
+            return a[sortByProperty].localeCompare(b[sortByProperty]) * order;
+        }
+    }
+    return (a: any, b: any) => {
+        return a.localeCompare(b) * order;
+    }
+}
 
-    options = { ...{ type: 'string', isAscending: true }, ...options };
+/**
+ * It sorts the elements of an array by a given property, which can have a type of string, number or date. It can also sort
+ * array of primitive values. In that case, sort by property can be omitted.
+ * 
+ * @param sortByProperty property to be used during the sort process or undefined in case it is an array of primitive values.
+ * @param options { isAscending: boolean, type: string | date | number | undefined }
+ * 
+ * If no order is specified, it defaults to ascending.
+ * 
+ * @returns sorted array based on options given.
+ */
+export function SortBy<T>(sortByProperty?: string | symbol | number, options?: { isAscending?: boolean, type?: 'string' | 'number' | 'date' }) {
+
+    options = { ...{ isAscending: true }, ...options };
 
     const value = Symbol();
 
@@ -41,7 +58,7 @@ export function SortBy<T>(sortByProperty?: string | symbol | number, options?: {
                     throw Error(`The ${propertyKey} is not an Array!`)
                 }
                 target[value] = newValue.sort(
-                    sortFunctionFactory(options?.isAscending, sortByProperty)
+                    sortFunctionFactory(options?.isAscending, options?.type, sortByProperty)
                 );
             }
             ,

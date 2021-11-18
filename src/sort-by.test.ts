@@ -42,7 +42,7 @@ export class Greeting {
     }
 }
 
-it('It should sort the array of object by key', () => {
+it('It should sort the array of object by key in descending order', () => {
     expect([{
         key: 3,
         value: 'c'
@@ -55,15 +55,15 @@ it('It should sort the array of object by key', () => {
     }]).toEqual(new Greeting().array);
 })
 
-it('It should sort the array numbers in descending order', () => {
+it('It should sort the array of numbers in descending order', () => {
     expect([9, 4, 3, 1]).toEqual(new Greeting().numbers);
 })
 
-it('It should sort the array numbers in ascending order', () => {
+it('It should sort the array of numbers in ascending order', () => {
     expect([1, 2, 3, 4]).toEqual(new Greeting().numbersAscending);
 })
 
-it('It should sort date array', () => {
+it('It should sort date array in ascending order', () => {
     const dates = [new Date('2020-06-10'), new Date('2020-06-16'), new Date('2020-06-17'), new Date('2020-06-20')];
     expect(dates).toEqual(new Greeting().dates);
 })
