@@ -1,4 +1,4 @@
-import { SortBy } from './sort-by';
+import { SortBy } from '../sort-by';
 
 interface Item {
     key: number,
