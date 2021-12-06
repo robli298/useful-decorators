@@ -37,12 +37,12 @@ const sortFunctionStringFactory = (order: number, sortByProperty?: string | symb
 /**
  * It sorts the elements of an array by a given property, which can have a type of string, number or date. It can also sort
  * array of primitive values. In that case, sort by property can be omitted.
- * 
+ *
  * @param sortByProperty property to be used during the sort process or undefined in case it is an array of primitive values.
  * @param options { isAscending: boolean, type: string | date | number | undefined }
- * 
+ *
  * If no order is specified, it defaults to ascending.
- * 
+ *
  * @returns sorted array based on options given.
  */
 export function SortBy<T>(sortByProperty?: string | symbol | number, options?: { isAscending?: boolean, type?: 'string' | 'number' | 'date' }) {
@@ -57,9 +57,12 @@ export function SortBy<T>(sortByProperty?: string | symbol | number, options?: {
                 if (!newValue || !Array.isArray(newValue)) {
                     throw Error(`The ${propertyKey} is not an Array!`)
                 }
-                target[value] = newValue.sort(
+
+                newValue.sort(
                     sortFunctionFactory(options?.isAscending, options?.type, sortByProperty)
                 );
+
+                target[value] = newValue;
             }
             ,
             get: function () { return target[value]; }
